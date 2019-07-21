@@ -1,5 +1,16 @@
-<div class="column-cells">
-  <app-cell [cards]="columnCells[0]"></app-cell>
-  <app-cell [cards]="columnCells[1]"></app-cell>
-  <app-cell [cards]="columnCells[2]"></app-cell>
+<div class="column-cells" cdkDropListGroup>
+  <div class="cell" *ngFor="let cell of columnCells"
+       [style.padding-top]="cell.length * 20 + 'px'"
+       cdkDropList
+       [cdkDropListData]="cell"
+       (cdkDropListDropped)="drop($event)"
+  >
+    <app-card *ngFor="let card of cell; index as i"
+              [card]="card"
+              [style.top]="i * 20 + 'px'"
+              cdkDrag
+              [cdkDragData]="card"
+    >
+    </app-card>
+  </div>
 </div>

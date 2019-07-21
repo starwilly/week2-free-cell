@@ -3,6 +3,21 @@
   display: flex;
 }
 
-app-cell {
-  margin: 0 15px;
+//app-cell {
+//  margin: 0 15px;
+//}
+.cell, .card {
+  width: 200px;
+  height: 300px;
+}
+
+.cell {
+  background-color: #eee;
+  position: relative;
+  margin: 0 20px;
+
+  app-card {
+    position: absolute;
+    left: 0;
+  }
 }

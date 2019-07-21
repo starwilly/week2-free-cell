@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {createDeck} from './utils';
 import {Card, Suit} from './models';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-root',
@@ -30,5 +31,9 @@ export class AppComponent implements OnInit {
         new Card(Suit.spade, 9),
       ]
     ];
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    console.log(event.item.data, event.previousContainer.data, event.container.data);
   }
 }
