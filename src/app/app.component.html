@@ -1,16 +1,27 @@
-<div class="column-cells" cdkDropListGroup>
-  <div class="cell" *ngFor="let cell of columnCells"
-       [style.padding-top]="cell.length * 20 + 'px'"
-       cdkDropList
-       [cdkDropListData]="cell"
-       (cdkDropListDropped)="drop($event)"
-  >
-    <app-card *ngFor="let card of cell; index as i"
-              [card]="card"
-              [style.top]="i * 20 + 'px'"
-              cdkDrag
-              [cdkDragData]="card"
+<div class="board" cdkDropListGroup>
+  <div class="special-cells">
+    <div *ngFor="let cell of tempCells" class="cell temp-cell" ></div>
+    <div class="brand">
+      <img class="logo" src="/assets/images/king_happy.png" alt="">
+      <span>FREECELL</span>
+    </div>
+    <div *ngFor="let cell of homeCells" class="cell home-cell" ></div>
+  </div>
+  <div class="column-cells">
+    <div class="cell column-cell" *ngFor="let cell of columnCells"
+         [style.padding-top]="cell.length * 20 + 'px'"
+         cdkDropList
+         [cdkDropListData]="cell"
+         (cdkDropListDropped)="drop($event)"
     >
-    </app-card>
+      <app-card *ngFor="let card of cell; index as i"
+                [card]="card"
+                [style.top]="i * 20 + 'px'"
+                cdkDrag
+                [cdkDragData]="card"
+      >
+      </app-card>
+    </div>
+
   </div>
 </div>

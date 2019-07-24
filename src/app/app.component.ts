@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {createDeck} from './utils';
 import {Card, Suit} from './models';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {ColumnCell, HomeCell, TempCell} from './models/pile.model';
 
 @Component({
   selector: 'app-root',
@@ -10,27 +11,15 @@ import {CdkDragDrop} from '@angular/cdk/drag-drop';
 })
 export class AppComponent implements OnInit {
   title = 'week2-free-cell';
-  columnCells: Card[][] = [];
+  columnCells: ColumnCell[];
+  tempCells: TempCell[];
+  homeCells: HomeCell[];
 
   ngOnInit(): void {
     const deck = createDeck();
-    this.columnCells = [
-      [
-        new Card(Suit.spade, 1),
-        new Card(Suit.spade, 2),
-        new Card(Suit.spade, 3),
-      ],
-      [
-        new Card(Suit.spade, 4),
-        new Card(Suit.spade, 5),
-        new Card(Suit.spade, 6),
-      ],
-      [
-        new Card(Suit.spade, 7),
-        new Card(Suit.spade, 8),
-        new Card(Suit.spade, 9),
-      ]
-    ];
+    this.tempCells = Array(4).fill(null).map(_ => new TempCell());
+    this.homeCells = Array(4).fill(null).map(_ => new HomeCell());
+    this.columnCells = Array(8).fill(0).map(_ => new ColumnCell());
   }
 
   drop(event: CdkDragDrop<string[]>) {
