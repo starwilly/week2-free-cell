@@ -65,8 +65,29 @@
   margin: 0 20px;
 
   app-card {
-    position: absolute;
-    left: 0;
+    img {
+      -webkit-user-drag: none;
+
+    }
   }
 }
 
+.card-wrapper {
+  position: absolute;
+  left: 0;
+}
+
+.cards-drag-preview {
+  //position: relative;
+  border: 1px solid red;
+  app-card {
+    position: absolute;
+    top: 0;
+    //border: 1px solid green;
+  }
+}
+
+.cdk-drag-placeholder {
+  //border: 1px solid blue;
+  opacity: 0 !important;
+}

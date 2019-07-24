@@ -1,26 +1,39 @@
 <div class="board" cdkDropListGroup>
   <div class="special-cells">
-    <div *ngFor="let cell of tempCells" class="cell temp-cell" ></div>
+    <div *ngFor="let cell of tempCells" class="cell temp-cell"></div>
     <div class="brand">
       <img class="logo" src="/assets/images/king_happy.png" alt="">
       <span>FREECELL</span>
     </div>
-    <div *ngFor="let cell of homeCells" class="cell home-cell" ></div>
+    <div *ngFor="let cell of homeCells" class="cell home-cell"></div>
   </div>
   <div class="column-cells">
     <div class="cell column-cell" *ngFor="let cell of columnCells"
          [style.padding-top]="cell.cards.length * 20 + 'px'"
          cdkDropList
+         cdkDropListSortingDisabled
          [cdkDropListData]="cell"
          (cdkDropListDropped)="drop($event)"
     >
-      <app-card *ngFor="let card of cell.cards; index as i"
-                [card]="card"
-                [style.top]="i * 20 + 'px'"
-                cdkDrag
-                [cdkDragData]="card"
+      <div class="card-wrapper"
+           *ngFor="let card of cell.cards; index as i"
+           [style.top]="i * 25 + 'px'"
+           cdkDrag
+           [cdkDragDisabled]="!cell.canMoves[i]"
+           [cdkDragData]="{card: card, cell: cell}"
+           (cdkDragStarted)="onDragStart($event)"
+           (cdkDragEnded)="onDragEnd($event)"
+           [style.opacity]="cell.dragIndex === -1 ? 1 : i >= cell.dragIndex  ? 0 : 1"
       >
-      </app-card>
+        <app-card [card]="card"></app-card>
+        <ng-template cdkDragPreview cdkDragPlaceholder>
+          <div class="cards-drag-preview">
+            <ng-container *ngFor="let card of cell.cards; index as j">
+              <app-card [card]="card" *ngIf="i <= j" [style.top]="(j -i) * 25 + 'px'"></app-card>
+            </ng-container>
+          </div>
+        </ng-template>
+      </div>
     </div>
 
   </div>

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {createDeck, shuffleCardToPiles} from './utils';
 import {Card, Suit} from './models';
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {ColumnCell, HomeCell, TempCell} from './models/pile.model';
+import {CdkDragDrop, CdkDragEnd, CdkDragStart} from '@angular/cdk/drag-drop';
+import {ColumnCell, HomeCell, TempCell} from './models/cell.model';
 
 @Component({
   selector: 'app-root',
@@ -16,9 +16,17 @@ export class AppComponent implements OnInit {
   homeCells: HomeCell[];
 
   ngOnInit(): void {
+    this.startNewGame();
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    console.log(event.item.data, event.previousContainer.data, event.container.data);
+  }
+
+  startNewGame(): void {
     const deck = createDeck();
     const piles = shuffleCardToPiles(createDeck());
-    console.log(piles);
+    piles[0].push(new Card(Suit.diamond, 8), new Card(Suit.club, 7));
     this.tempCells = Array(4).fill(null).map(_ => new TempCell());
     this.homeCells = Array(4).fill(null).map(_ => new HomeCell());
     this.columnCells = Array(8).fill(0).map((_, index) => {
@@ -26,7 +34,14 @@ export class AppComponent implements OnInit {
     });
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    console.log(event.item.data, event.previousContainer.data, event.container.data);
+  onDragStart(event: CdkDragStart) {
+    const cell: ColumnCell = event.source.data.cell;
+    const card: Card = event.source.data.card;
+    console.log(cell.cards.indexOf(card));
+    cell.dragIndex = cell.cards.indexOf(card);
+  }
+  onDragEnd(event: CdkDragEnd) {
+    const cell: ColumnCell = event.source.data.cell;
+    cell.dragIndex = -1;
   }
 }

@@ -17,4 +17,13 @@ export class Card {
     return this._rank;
   }
 
+  isSameColor(card): boolean {
+    const mapping = {
+      [Suit.spade]: 'black',
+      [Suit.heart]: 'red',
+      [Suit.diamond]: 'red',
+      [Suit.club]: 'black'
+    };
+    return mapping[this.suit] === mapping[card.suit];
+  }
 }
