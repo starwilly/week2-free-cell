@@ -5,7 +5,7 @@ interface Pile {
 }
 
 abstract class AbstractCell implements Pile {
-  private _cards: Card[];
+  protected _cards: Card[];
   private maxSize: number;
 
   protected constructor(maxSize: number) {
@@ -19,8 +19,9 @@ abstract class AbstractCell implements Pile {
 }
 
 export class ColumnCell extends AbstractCell {
-  constructor() {
+  constructor(cards: Card[]) {
     super(13);
+    this._cards = cards;
   }
 }
 

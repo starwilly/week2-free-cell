@@ -1,4 +1,5 @@
 import {Card, Suit} from './models';
+import shuffle from 'lodash-es/shuffle';
 
 export function createDeck(): Card[] {
   const deck = [];
@@ -9,4 +10,14 @@ export function createDeck(): Card[] {
       });
     });
   return deck;
+}
+
+export function shuffleCardToPiles(cards: Card[], size: number = 8): Card[][] {
+  const shuffledCards = shuffle(cards);
+  const output = Array(size);
+  shuffledCards.forEach((card, i) => {
+    const idx = i % size;
+    output[idx] = output[idx] ? [...output[idx], card] : [card];
+  });
+  return output;
 }

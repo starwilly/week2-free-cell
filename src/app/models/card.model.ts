@@ -16,4 +16,5 @@ export class Card {
   get rank(): number {
     return this._rank;
   }
+
 }

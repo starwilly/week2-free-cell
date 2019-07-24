@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {createDeck} from './utils';
+import {createDeck, shuffleCardToPiles} from './utils';
 import {Card, Suit} from './models';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {ColumnCell, HomeCell, TempCell} from './models/pile.model';
@@ -17,9 +17,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const deck = createDeck();
+    const piles = shuffleCardToPiles(createDeck());
+    console.log(piles);
     this.tempCells = Array(4).fill(null).map(_ => new TempCell());
     this.homeCells = Array(4).fill(null).map(_ => new HomeCell());
-    this.columnCells = Array(8).fill(0).map(_ => new ColumnCell());
+    this.columnCells = Array(8).fill(0).map((_, index) => {
+      return new ColumnCell(piles[index]);
+    });
   }
 
   drop(event: CdkDragDrop<string[]>) {

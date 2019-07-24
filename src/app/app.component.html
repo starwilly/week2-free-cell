@@ -9,12 +9,12 @@
   </div>
   <div class="column-cells">
     <div class="cell column-cell" *ngFor="let cell of columnCells"
-         [style.padding-top]="cell.length * 20 + 'px'"
+         [style.padding-top]="cell.cards.length * 20 + 'px'"
          cdkDropList
          [cdkDropListData]="cell"
          (cdkDropListDropped)="drop($event)"
     >
-      <app-card *ngFor="let card of cell; index as i"
+      <app-card *ngFor="let card of cell.cards; index as i"
                 [card]="card"
                 [style.top]="i * 20 + 'px'"
                 cdkDrag

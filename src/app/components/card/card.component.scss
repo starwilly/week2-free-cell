@@ -4,8 +4,13 @@
   display: block;
 }
 .card {
-  width: 200px;
-  height: 300px;
-  background-color: #fff;
-  border: 1px solid darkcyan;
+  width: $card-width;
+  height: $card-height;
+  //background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  & > img {
+    width: 100%;
+    height: 100%;
+  }
 }
