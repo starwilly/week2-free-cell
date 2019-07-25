@@ -13,13 +13,13 @@
          cdkDropList
          cdkDropListSortingDisabled
          [cdkDropListData]="cell"
-         (cdkDropListDropped)="drop($event)"
+         (cdkDropListDropped)="onCellDropped($event)"
     >
       <div class="card-wrapper"
            *ngFor="let card of cell.cards; index as i"
            [style.top]="i * 25 + 'px'"
            cdkDrag
-           [cdkDragDisabled]="!cell.canMoves[i]"
+           [cdkDragDisabled]="!cell.canMove(card)"
            [cdkDragData]="{card: card, cell: cell}"
            (cdkDragStarted)="onDragStart($event)"
            (cdkDragEnded)="onDragEnd($event)"

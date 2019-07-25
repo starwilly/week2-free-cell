@@ -4,7 +4,13 @@
   box-sizing: border-box;
 }
 
+html,body {
+  min-height: 100%;
+}
+
 body {
   background-color: #E2E2E2;
   font-family: 'Lato', sans-serif;
+  padding: 0;
+  min-height: 100vh;
 }

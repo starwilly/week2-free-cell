@@ -19,14 +19,21 @@ export class AppComponent implements OnInit {
     this.startNewGame();
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    console.log(event.item.data, event.previousContainer.data, event.container.data);
+  onCellDropped(event: CdkDragDrop<ColumnCell>) {
+    const previousCell: ColumnCell = event.previousContainer.data;
+    const cell = event.container.data;
+    const movedCard = previousCell.cards.slice(event.previousIndex);
+    if (previousCell !== cell && cell.canAdd(movedCard)) {
+      const removed = previousCell.removeCards(event.previousIndex);
+      cell.addCards(removed);
+    }
   }
 
   startNewGame(): void {
     const deck = createDeck();
     const piles = shuffleCardToPiles(createDeck());
     piles[0].push(new Card(Suit.diamond, 8), new Card(Suit.club, 7));
+    piles[1].push(new Card(Suit.spade, 9));
     this.tempCells = Array(4).fill(null).map(_ => new TempCell());
     this.homeCells = Array(4).fill(null).map(_ => new HomeCell());
     this.columnCells = Array(8).fill(0).map((_, index) => {
@@ -37,11 +44,17 @@ export class AppComponent implements OnInit {
   onDragStart(event: CdkDragStart) {
     const cell: ColumnCell = event.source.data.cell;
     const card: Card = event.source.data.card;
-    console.log(cell.cards.indexOf(card));
     cell.dragIndex = cell.cards.indexOf(card);
   }
+
   onDragEnd(event: CdkDragEnd) {
     const cell: ColumnCell = event.source.data.cell;
     cell.dragIndex = -1;
+    console.log('drag end', event);
   }
+
+  // onDragDrop(event: CdkDragDrop<any>) {
+  //   const sameContainer = event.previousContainer === event.container;
+  //   console.log('drop', event, sameContainer);
+  // }
 }
