@@ -1,11 +1,49 @@
 <div class="board" cdkDropListGroup>
   <div class="special-cells">
-    <div *ngFor="let cell of tempCells" class="cell temp-cell"></div>
+    <div *ngFor="let cell of tempCells" class="cell temp-cell"
+         cdkDropList
+         cdkDropListSortingDisabled
+         [cdkDropListData]="cell"
+         (cdkDropListDropped)="onCellDropped($event)"
+    >
+      <div class="card-wrapper" *ngFor="let card of cell.cards; index as i"
+           cdkDrag
+           [cdkDragDisabled]="!cell.canMove(card)"
+           [cdkDragData]="{card: card, cell: cell}"
+           (cdkDragStarted)="onDragStart($event)"
+           (cdkDragEnded)="onDragEnd($event)"
+      >
+
+        <app-card [card]="card"></app-card>
+        <ng-template cdkDragPreview cdkDragPlaceholder>
+          <div class="cards-drag-preview">
+            <ng-container *ngIf="cell.cards.length > 0">
+              <app-card [card]="cell.cards[0]"></app-card>
+            </ng-container>
+          </div>
+        </ng-template>
+      </div>
+
+    </div>
     <div class="brand">
       <img class="logo" src="/assets/images/king_happy.png" alt="">
       <span>FREECELL</span>
     </div>
-    <div *ngFor="let cell of homeCells" class="cell home-cell"></div>
+    <div *ngFor="let cell of homeCells" class="cell home-cell"
+         cdkDropList
+         cdkDropListSortingDisabled
+         [cdkDropListData]="cell"
+         (cdkDropListDropped)="onCellDropped($event)"
+    >
+      <img *ngIf="cell.cards.length === 0; else homeCellCard"
+           [src]="cell.imgUrl" alt="" class="cell__placeholder"/>
+      <ng-template #homeCellCard>
+        <app-card *ngFor="let card of cell.cards"
+                  [card]="card">
+        </app-card>
+      </ng-template>
+
+    </div>
   </div>
   <div class="column-cells">
     <div class="cell column-cell" *ngFor="let cell of columnCells"
@@ -29,11 +67,24 @@
         <ng-template cdkDragPreview cdkDragPlaceholder>
           <div class="cards-drag-preview">
             <ng-container *ngFor="let card of cell.cards; index as j">
-              <app-card [card]="card" *ngIf="i <= j" [style.top]="(j -i) * 25 + 'px'"></app-card>
+              <app-card [card]="card" *ngIf="i <= j" [style.margin-top]="(j -i) * 25 + 'px'"></app-card>
             </ng-container>
           </div>
         </ng-template>
       </div>
+    </div>
+  </div>
+  <div class="control-panel">
+    <div class="infos">
+      <img class="info-icon" src="/assets/images/info.png" alt="">
+      <span class="info">TIME: 00:00</span>
+      <span class="info">SCORE: 00:00</span>
+    </div>
+    <div class="actions">
+      <button class="btn btn--block">New Game</button>
+      <button class="btn btn--block">Restart</button>
+      <button class="btn btn--block">Hint</button>
+      <button class="btn btn--block">Undo</button>
     </div>
 
   </div>

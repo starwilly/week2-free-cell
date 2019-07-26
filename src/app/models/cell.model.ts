@@ -1,34 +1,32 @@
-import {Card} from './card.model';
-import reduceRight from 'lodash-es/reduceRight';
+import {Card, Suit} from './card.model';
 
-interface Pile {
+export interface Pile {
   cards: Card[];
-
   canMove(card: Card): boolean;
-
   canAdd(newCards: Card[]): boolean;
+  addCards(cards: Card[]): void;
+  removeCards(index: number): Card[];
 }
 
-abstract class AbstractCell implements Pile {
+abstract class AbstractCell {
+  static maxSize: number;
   protected _cards: Card[];
-  protected maxSize: number;
 
-  protected constructor(maxSize: number) {
-    this._cards = [];
-    this.maxSize = maxSize;
+  protected constructor(card: Card[] = []) {
+    this._cards = card;
   }
 
   get cards(): Card[] {
     return this._cards;
   }
 
-  canMove(card: Card): boolean {
-    throw new Error('Not implement');
-  }
-
-  canAdd(newCards: Card[]): boolean {
-    throw new Error('Not implement');
-  }
+  // canMove(card: Card): boolean {
+  //   throw new Error('Not implement');
+  // }
+  //
+  // canAdd(newCards: Card[]): boolean {
+  //   throw new Error('Not implement');
+  // }
 
   addCards(cards: Card[]) {
     this._cards = [...this._cards, ...cards];
@@ -41,13 +39,12 @@ abstract class AbstractCell implements Pile {
   }
 }
 
-export class ColumnCell extends AbstractCell {
+export class ColumnCell extends AbstractCell implements Pile {
   dragIndex = -1;
   private canMoves: boolean [];
 
-  constructor(cards: Card[]) {
-    super(13);
-    this._cards = cards;
+  constructor(cards: Card[] = []) {
+    super(cards);
     this.updateCanMoves();
   }
 
@@ -94,14 +91,39 @@ export class ColumnCell extends AbstractCell {
   }
 }
 
-export class HomeCell extends AbstractCell {
-  constructor() {
-    super(13);
+export class HomeCell extends AbstractCell implements Pile {
+  static maxSize = 13;
+  suit: Suit;
+  readonly imgUrl: string;
+  constructor(suit: Suit, cards: Card[] = []) {
+    super(cards);
+    this.suit = suit;
+    this.imgUrl = `/assets/images/${Suit[this.suit][0].toUpperCase()}.png`;
+  }
+
+  canAdd(newCards: Card[]): boolean {
+    const lastRank = this.cards.length === 0 ? 0 : this.cards[this.cards.length - 1].rank;
+    console.log(lastRank);
+    return newCards.length === 1
+      && this.suit === newCards[0].suit
+      && newCards[0].rank - lastRank === 1;
+  }
+
+  canMove(card: Card): boolean {
+    return false;
   }
 }
 
-export class TempCell extends AbstractCell {
-  constructor() {
-    super(1);
+export class TempCell extends AbstractCell implements Pile {
+  constructor(cards: Card[] = [] ) {
+    super(cards);
+  }
+
+  canAdd(newCards: Card[]): boolean {
+    return this.cards.length === 0 && newCards.length === 1;
+  }
+
+  canMove(card: Card): boolean {
+    return this.cards.indexOf(card) >= 0;
   }
 }
