@@ -20,14 +20,6 @@ abstract class AbstractCell {
     return this._cards;
   }
 
-  // canMove(card: Card): boolean {
-  //   throw new Error('Not implement');
-  // }
-  //
-  // canAdd(newCards: Card[]): boolean {
-  //   throw new Error('Not implement');
-  // }
-
   addCards(cards: Card[]) {
     this._cards = [...this._cards, ...cards];
   }

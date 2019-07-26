@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {createDeck, shuffleCardToPiles} from './utils';
-import {Card, Pile, Suit} from './models';
+import {Card, Pile, Suit, ColumnCell, HomeCell, TempCell} from './models';
 import {CdkDragDrop, CdkDragEnd, CdkDragStart} from '@angular/cdk/drag-drop';
-import {ColumnCell, HomeCell, TempCell} from './models/cell.model';
 import {CommandManager, MoveCommand} from './command';
 
 @Component({
@@ -29,8 +28,6 @@ export class AppComponent implements OnInit {
     if (previousCell !== cell && cell.canAdd(movedCard)) {
       const cmd = new MoveCommand(previousCell, cell, movedCard);
       this.commandManager.execute(cmd);
-      // const removed = previousCell.removeCards(movedCard);
-      // cell.addCards(removed);
     }
   }
 
@@ -40,11 +37,6 @@ export class AppComponent implements OnInit {
       piles = shuffleCardToPiles(deck);
       this.initPiles = piles;
     }
-    // piles[0].push(new Card(Suit.diamond, 8), new Card(Suit.club, 7));
-    // piles[1].push(new Card(Suit.spade, 9),
-      // new Card(Suit.spade, 2),
-      // new Card(Suit.spade, 1),
-    // );
     this.commandManager = new CommandManager();
     this.tempCells = Array(4).fill(null).map(_ => new TempCell());
     this.homeCells = [Suit.club, Suit.heart, Suit.diamond, Suit.spade]
@@ -64,7 +56,6 @@ export class AppComponent implements OnInit {
   onDragEnd(event: CdkDragEnd) {
     const cell: ColumnCell = event.source.data.cell;
     cell.dragIndex = -1;
-    // console.log('drag end', event);
   }
 
   onRestart(): void {
@@ -75,8 +66,4 @@ export class AppComponent implements OnInit {
     this.startNewGame();
   }
 
-  // onDragDrop(event: CdkDragDrop<any>) {
-  //   const sameContainer = event.previousContainer === event.container;
-  //   console.log('drop', event, sameContainer);
-  // }
 }
