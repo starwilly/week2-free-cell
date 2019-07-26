@@ -5,7 +5,7 @@ export interface Pile {
   canMove(card: Card): boolean;
   canAdd(newCards: Card[]): boolean;
   addCards(cards: Card[]): void;
-  removeCards(index: number): Card[];
+  removeCards(cards: Card[]): Card[];
 }
 
 abstract class AbstractCell {
@@ -32,7 +32,11 @@ abstract class AbstractCell {
     this._cards = [...this._cards, ...cards];
   }
 
-  removeCards(index: number): Card[] {
+  removeCards(cards: Card[]): Card[] {
+    if (cards.length === 0) {
+      return [];
+    }
+    const index = this._cards.indexOf(cards[0]);
     const removed = this._cards.slice(index);
     this._cards = [...this._cards.slice(0, index)];
     return removed;
@@ -84,8 +88,8 @@ export class ColumnCell extends AbstractCell implements Pile {
     this.updateCanMoves();
   }
 
-  removeCards(index: number): Card[] {
-    const result = super.removeCards(index);
+  removeCards(cards: Card[]): Card[] {
+    const result = super.removeCards(cards);
     this.updateCanMoves();
     return result;
   }

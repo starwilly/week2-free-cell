@@ -84,7 +84,10 @@
       <button class="btn btn--block">New Game</button>
       <button class="btn btn--block">Restart</button>
       <button class="btn btn--block">Hint</button>
-      <button class="btn btn--block">Undo</button>
+      <button class="btn btn--block"
+              [disabled]="!commandManager.hasCommand"
+              (click)="commandManager.undo()"
+      >Undo</button>
     </div>
 
   </div>

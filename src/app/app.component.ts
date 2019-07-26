@@ -3,7 +3,7 @@ import {createDeck, shuffleCardToPiles} from './utils';
 import {Card, Pile, Suit} from './models';
 import {CdkDragDrop, CdkDragEnd, CdkDragStart} from '@angular/cdk/drag-drop';
 import {ColumnCell, HomeCell, TempCell} from './models/cell.model';
-import {take} from 'rxjs/operators';
+import {CommandManager, MoveCommand} from './command';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   columnCells: ColumnCell[];
   tempCells: TempCell[];
   homeCells: HomeCell[];
+  commandManager: CommandManager;
 
   ngOnInit(): void {
     this.startNewGame();
@@ -25,8 +26,10 @@ export class AppComponent implements OnInit {
     const cell = event.container.data;
     const movedCard = previousCell.cards.slice(event.previousIndex);
     if (previousCell !== cell && cell.canAdd(movedCard)) {
-      const removed = previousCell.removeCards(event.previousIndex);
-      cell.addCards(removed);
+      const cmd = new MoveCommand(previousCell, cell, movedCard);
+      this.commandManager.execute(cmd);
+      // const removed = previousCell.removeCards(movedCard);
+      // cell.addCards(removed);
     }
   }
 
@@ -35,9 +38,10 @@ export class AppComponent implements OnInit {
     const piles = shuffleCardToPiles(createDeck());
     piles[0].push(new Card(Suit.diamond, 8), new Card(Suit.club, 7));
     piles[1].push(new Card(Suit.spade, 9),
-      new Card(Suit.spade, 2),
-      new Card(Suit.spade, 1),
+      // new Card(Suit.spade, 2),
+      // new Card(Suit.spade, 1),
     );
+    this.commandManager = new CommandManager();
     this.tempCells = Array(4).fill(null).map(_ => new TempCell());
     this.homeCells = [Suit.club, Suit.heart, Suit.diamond, Suit.spade]
       .map(suit => new HomeCell(suit));

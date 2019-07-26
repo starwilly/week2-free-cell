@@ -154,5 +154,9 @@
   &:hover {
     background-color: #FFB53E;
   }
+  &[disabled] {
+    background-color: #999;
+    cursor: not-allowed;
+  }
 }
 
