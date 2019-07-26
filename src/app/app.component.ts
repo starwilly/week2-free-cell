@@ -11,11 +11,12 @@ import {CommandManager, MoveCommand} from './command';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'week2-free-cell';
   columnCells: ColumnCell[];
   tempCells: TempCell[];
   homeCells: HomeCell[];
-  commandManager: CommandManager;
+
+  private commandManager: CommandManager;
+  private initPiles: Card[][];
 
   ngOnInit(): void {
     this.startNewGame();
@@ -33,14 +34,17 @@ export class AppComponent implements OnInit {
     }
   }
 
-  startNewGame(): void {
-    const deck = createDeck();
-    const piles = shuffleCardToPiles(createDeck());
-    piles[0].push(new Card(Suit.diamond, 8), new Card(Suit.club, 7));
-    piles[1].push(new Card(Suit.spade, 9),
+  private startNewGame(piles: Card[][] | null = null): void {
+    if (!piles) {
+      const deck = createDeck();
+      piles = shuffleCardToPiles(deck);
+      this.initPiles = piles;
+    }
+    // piles[0].push(new Card(Suit.diamond, 8), new Card(Suit.club, 7));
+    // piles[1].push(new Card(Suit.spade, 9),
       // new Card(Suit.spade, 2),
       // new Card(Suit.spade, 1),
-    );
+    // );
     this.commandManager = new CommandManager();
     this.tempCells = Array(4).fill(null).map(_ => new TempCell());
     this.homeCells = [Suit.club, Suit.heart, Suit.diamond, Suit.spade]
@@ -61,6 +65,14 @@ export class AppComponent implements OnInit {
     const cell: ColumnCell = event.source.data.cell;
     cell.dragIndex = -1;
     // console.log('drag end', event);
+  }
+
+  onRestart(): void {
+    this.startNewGame(this.initPiles);
+  }
+
+  onNewGame(): void {
+    this.startNewGame();
   }
 
   // onDragDrop(event: CdkDragDrop<any>) {
