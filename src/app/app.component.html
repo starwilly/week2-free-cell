@@ -77,8 +77,8 @@
   <div class="control-panel">
     <div class="infos">
       <img class="info-icon" src="/assets/images/info.png" alt="">
-      <span class="info">TIME: 00:00</span>
-      <span class="info">SCORE: 00:00</span>
+      <span class="info">TIME: {{ (timer$ | async) * 1000 | date: 'HH:mm:ss':'+0000' }}</span>
+      <span class="info">SCORE: </span>
     </div>
     <div class="actions">
       <button class="btn btn--block" (click)="onNewGame()">New Game</button>

@@ -1,24 +1,33 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {createDeck, shuffleCardToPiles} from './utils';
 import {Card, Pile, Suit, ColumnCell, HomeCell, TempCell} from './models';
 import {CdkDragDrop, CdkDragEnd, CdkDragStart} from '@angular/cdk/drag-drop';
 import {CommandManager, MoveCommand} from './command';
+import {Observable, Subject, timer} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   columnCells: ColumnCell[];
   tempCells: TempCell[];
   homeCells: HomeCell[];
 
   private commandManager: CommandManager;
   private initPiles: Card[][];
+  private destory$ = new Subject<void>();
+  timer$: Observable<number>;
 
   ngOnInit(): void {
     this.startNewGame();
+  }
+
+  ngOnDestroy(): void {
+    this.destory$.next();
+    this.destory$.complete();
   }
 
   onCellDropped(event: CdkDragDrop<Pile>) {
@@ -44,6 +53,11 @@ export class AppComponent implements OnInit {
     this.columnCells = Array(8).fill(0).map((_, index) => {
       return new ColumnCell(piles[index]);
     });
+    this.setupTimer();
+  }
+
+  private setupTimer(): void {
+      this.timer$ = timer(0, 1000);
   }
 
   onDragStart(event: CdkDragStart) {
@@ -65,5 +79,6 @@ export class AppComponent implements OnInit {
   onNewGame(): void {
     this.startNewGame();
   }
+
 
 }
