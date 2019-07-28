@@ -99,7 +99,7 @@ export class HomeCell extends AbstractCell implements Pile {
 
   canAdd(newCards: Card[]): boolean {
     const lastRank = this.cards.length === 0 ? 0 : this.cards[this.cards.length - 1].rank;
-    console.log(lastRank);
+    // console.log(lastRank);
     return newCards.length === 1
       && this.suit === newCards[0].suit
       && newCards[0].rank - lastRank === 1;

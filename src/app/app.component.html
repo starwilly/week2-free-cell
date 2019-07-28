@@ -13,7 +13,6 @@
            (cdkDragStarted)="onDragStart($event)"
            (cdkDragEnded)="onDragEnd($event)"
       >
-
         <app-card [card]="card"></app-card>
         <ng-template cdkDragPreview cdkDragPlaceholder>
           <div class="cards-drag-preview">
@@ -23,7 +22,12 @@
           </div>
         </ng-template>
       </div>
-
+      <div *ngIf="showToHint && hint && hint.toCell === cell" class="hint"
+           [style.top]="cell.cards.length > 0 ? (cell.cards.length -1) * 25 + 'px' : 0"></div>
+      <div *ngIf="showFromHint && hint && hint.fromCell === cell" class="hint"
+           [style.top]="(cell.cards.indexOf(hint.cards[0]) ) * 25 + 'px'"
+           [style.height]="(145 + (hint.cards.length - 1) * 25) + 'px'"
+      ></div>
     </div>
     <div class="brand">
       <img class="logo" src="/assets/images/king_happy.png" alt="">
@@ -42,7 +46,12 @@
                   [card]="card">
         </app-card>
       </ng-template>
-
+      <div *ngIf="showToHint && hint && hint.toCell === cell" class="hint"
+           [style.top]="cell.cards.length > 0 ? (cell.cards.length -1) * 25 + 'px' : 0"></div>
+      <div *ngIf="showFromHint && hint && hint.fromCell === cell" class="hint"
+           [style.top]="(cell.cards.indexOf(hint.cards[0]) ) * 25 + 'px'"
+           [style.height]="(145 + (hint.cards.length - 1) * 25) + 'px'"
+      ></div>
     </div>
   </div>
   <div class="column-cells">
@@ -72,6 +81,12 @@
           </div>
         </ng-template>
       </div>
+      <div *ngIf="showToHint && hint && hint.toCell === cell" class="hint"
+           [style.top]="cell.cards.length > 0 ? (cell.cards.length -1) * 25 + 'px' : 0"></div>
+      <div *ngIf="showFromHint && hint && hint.fromCell === cell" class="hint"
+           [style.top]="(cell.cards.indexOf(hint.cards[0]) ) * 25 + 'px'"
+           [style.height]="(145 + (hint.cards.length - 1) * 25) + 'px'"
+      ></div>
     </div>
   </div>
   <div class="control-panel">
@@ -83,7 +98,7 @@
     <div class="actions">
       <button class="btn btn--block" (click)="onNewGame()">New Game</button>
       <button class="btn btn--block" (click)="onRestart()">Restart</button>
-      <button class="btn btn--block">Hint</button>
+      <button class="btn btn--block" (click)="openHint()">Hint</button>
       <button class="btn btn--block"
               [disabled]="!commandManager.hasCommand"
               (click)="commandManager.undo()"

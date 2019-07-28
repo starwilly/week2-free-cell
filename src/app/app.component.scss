@@ -96,16 +96,13 @@
 }
 
 .cards-drag-preview {
-  border: 1px solid red;
   app-card {
     position: absolute;
-    border: 1px solid green;
     transform: translate(-$card-width / 2, -12.5px);
   }
 }
 
 .cdk-drag-placeholder {
-  //border: 1px solid blue;
   opacity: 0 !important;
 }
 
@@ -161,3 +158,16 @@
   }
 }
 
+.hint {
+  width: $card-width;
+  height: $card-height;
+  border: 2px solid #FFB53E;
+  border-radius: 5px;
+  top: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.cdk-drop-list-dragging > .hint {
+  display: none;
+}
