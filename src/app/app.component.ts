@@ -28,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   hint: Hint;
   showFromHint = false;
   showToHint = false;
+  score = 0;
 
   ngOnInit(): void {
     this.startNewGame();
@@ -43,14 +44,16 @@ export class AppComponent implements OnInit, OnDestroy {
     const cell = event.container.data;
     const movedCard = previousCell.cards.slice(event.previousIndex);
     if (previousCell !== cell && cell.canAdd(movedCard)) {
-      const cmd = new MoveCommand(previousCell, cell, movedCard);
-      this.commandManager.execute(cmd);
-      this.closeHint();
+        const cmd = new MoveCommand(previousCell, cell, movedCard);
+        this.commandManager.execute(cmd);
+        this.closeHint();
+        this.score += cell instanceof HomeCell ? 10 : -1;
     }
     this.updateHint();
   }
 
   private startNewGame(piles: Card[][] | null = null): void {
+    this.score = 0;
     if (!piles) {
       const deck = createDeck();
       piles = shuffleCardToPiles(deck);

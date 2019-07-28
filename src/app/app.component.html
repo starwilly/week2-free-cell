@@ -93,7 +93,7 @@
     <div class="infos">
       <img class="info-icon" src="/assets/images/info.png" alt="">
       <span class="info">TIME: {{ (timer$ | async) * 1000 | date: 'HH:mm:ss':'+0000' }}</span>
-      <span class="info">SCORE: </span>
+      <span class="info">SCORE: {{ score }}</span>
     </div>
     <div class="actions">
       <button class="btn btn--block" (click)="onNewGame()">New Game</button>
@@ -101,7 +101,7 @@
       <button class="btn btn--block" (click)="openHint()">Hint</button>
       <button class="btn btn--block"
               [disabled]="!commandManager.hasCommand"
-              (click)="commandManager.undo()"
+              (click)="commandManager.undo() && (this.score = this.score -1)"
       >Undo</button>
     </div>
 
